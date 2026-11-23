@@ -16,11 +16,31 @@ React (client) + Node/Express (server) + MongoDB.
 
 Open http://localhost:5173, create an account, and browse.
 
+## Features
+
+- Netflix-inspired cinematic home page with curated horizontal rows
+- Dedicated Movies, TV Shows, New & Popular, Search, and My List pages
+- 40 starter titles: 28 movies and 12 shows across multiple genres
+- Genre filters, responsive catalog grids, title search, and top-10 display
+- YouTube trailer detail pages, Continue Watching, and saved My List titles
+- JWT login and registration with data stored in MongoDB
+
+## Main client routes
+
+- `/` home and curated recommendations
+- `/movies` movie catalog with genre filters
+- `/shows` TV show catalog with genre filters
+- `/new` new releases and top-10 titles
+- `/search?q=title` catalog search results
+- `/mylist` the signed-in user's saved titles
+- `/movie/:id` trailer and title information
+
 ## Folder map
 - `server/models`      what a User and a Movie look like in MongoDB
 - `server/routes`      the API: auth, movies, my list
 - `server/middleware`  checks the login token
-- `client/src/pages`   Login, Register, Home, MovieDetail, MyList
+- `client/src/pages`   authentication, browse, search, detail, and My List pages
+- `client/src/components` reusable navigation, hero, rows, cards, and grids
 - `client/src/api.js`  all calls from React to the server
 
 ## Deploy on Render + MongoDB Atlas
@@ -82,8 +102,8 @@ Do not commit `server/.env`.
 
 - Open `https://<your-api-name>.onrender.com/api/health` and confirm it returns
   `{"status":"ok"}`.
-- Open the client, register a test account, switch between All, Movies, and
-  Shows, open one detail page, and refresh that page.
+- Open the client, register a test account, visit Movies, TV Shows, New &
+  Popular, Search, and My List, then open and refresh one detail page.
 - If the browser reports CORS errors, recheck `CLIENT_URL` for an exact match
   with the client origin and no trailing slash.
 
@@ -91,4 +111,6 @@ Render uses `/api/health` to check the API. Client-side routes are rewritten to
 `index.html`, so refreshing a movie detail page continues to work.
 
 ## Ideas for next steps
-Profiles per account, genre filter buttons, "continue watching", admin page to add movies.
+
+Multiple profiles per account, an admin page for catalog updates, viewing
+progress percentages, and trailer preview controls.
