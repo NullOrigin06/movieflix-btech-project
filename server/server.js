@@ -9,6 +9,9 @@ const authRoutes = require("./routes/auth");
 const movieRoutes = require("./routes/movies");
 const myListRoutes = require("./routes/mylist");
 const watchingRoutes = require("./routes/watching");
+const Movie = require("./models/Movie");
+const { replaceCatalog } = require("./seed");
+const { seedCatalogIfEmpty } = require("./catalogStartup");
 
 const app = express();
 
@@ -53,8 +56,13 @@ const PORT = process.env.PORT || 5000;
 // Connect to MongoDB first, then start listening
 mongoose
   .connect(process.env.MONGO_URI)
-  .then(() => {
+  .then(async () => {
     console.log("Connected to MongoDB");
+    const seeded = await seedCatalogIfEmpty({
+      countTitles: () => Movie.countDocuments(),
+      seedCatalog: replaceCatalog,
+    });
+    if (seeded) console.log("Loaded the starter catalog");
     app.listen(PORT, () => console.log("Server running on port " + PORT));
   })
   .catch((error) => {
