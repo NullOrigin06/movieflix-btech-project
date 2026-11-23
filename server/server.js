@@ -10,8 +10,8 @@ const movieRoutes = require("./routes/movies");
 const myListRoutes = require("./routes/mylist");
 const watchingRoutes = require("./routes/watching");
 const Movie = require("./models/Movie");
-const { replaceCatalog } = require("./seed");
-const { seedCatalogIfEmpty } = require("./catalogStartup");
+const { buildCatalog, replaceCatalog } = require("./seed");
+const { findMissingTitles, seedCatalogIfEmpty } = require("./catalogStartup");
 
 const app = express();
 
@@ -62,7 +62,16 @@ mongoose
       countTitles: () => Movie.countDocuments(),
       seedCatalog: replaceCatalog,
     });
-    if (seeded) console.log("Loaded the starter catalog");
+    if (seeded) {
+      console.log("Loaded the starter catalog");
+    } else {
+      const existingTitles = await Movie.find({}, { title: 1, type: 1 }).lean();
+      const missingTitles = findMissingTitles(existingTitles, buildCatalog());
+      if (missingTitles.length > 0) {
+        await Movie.insertMany(missingTitles);
+        console.log(`Added ${missingTitles.length} new catalog titles`);
+      }
+    }
     app.listen(PORT, () => console.log("Server running on port " + PORT));
   })
   .catch((error) => {

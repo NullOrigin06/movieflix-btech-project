@@ -1,7 +1,25 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
 
-const { seedCatalogIfEmpty } = require("../catalogStartup");
+const { findMissingTitles, seedCatalogIfEmpty } = require("../catalogStartup");
+
+test("finds only titles that are not already in the catalog", () => {
+  const existing = [
+    { title: "Inception", type: "Movie" },
+    { title: "Dark", type: "Show" },
+  ];
+  const desired = [
+    { title: "Inception", type: "Movie" },
+    { title: "Dark", type: "Show" },
+    { title: "Oppenheimer", type: "Movie" },
+    { title: "Money Heist", type: "Show" },
+  ];
+
+  assert.deepEqual(findMissingTitles(existing, desired), [
+    { title: "Oppenheimer", type: "Movie" },
+    { title: "Money Heist", type: "Show" },
+  ]);
+});
 
 test("seeds a brand-new database exactly once", async () => {
   const catalog = [];

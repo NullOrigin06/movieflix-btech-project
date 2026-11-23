@@ -90,14 +90,18 @@ const shows = [
     description: "A monster hunter travels through a dangerous world as his fate becomes tied to a princess with a secret." },
 ];
 
-async function replaceCatalog() {
-  const titles = [
+function buildCatalog() {
+  return [
     ...movies.map((movie) => ({ ...movie, type: "Movie" })),
     ...shows.map((show) => ({ ...show, type: "Show" })),
   ].map((title) => ({
     ...title,
     posterUrl: "https://img.youtube.com/vi/" + title.trailerId + "/hqdefault.jpg",
   }));
+}
+
+async function replaceCatalog() {
+  const titles = buildCatalog();
 
   // Stage the replacement first. A bad title must not wipe the working catalog.
   const inserted = await Movie.insertMany(titles);
@@ -131,4 +135,4 @@ if (require.main === module) {
   });
 }
 
-module.exports = { replaceCatalog };
+module.exports = { buildCatalog, replaceCatalog };

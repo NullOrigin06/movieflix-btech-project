@@ -7,4 +7,14 @@ async function seedCatalogIfEmpty({ countTitles, seedCatalog }) {
   return true;
 }
 
-module.exports = { seedCatalogIfEmpty };
+function findMissingTitles(existingTitles, desiredTitles) {
+  const existingKeys = new Set(
+    existingTitles.map((title) => `${title.type}:${title.title}`),
+  );
+
+  return desiredTitles.filter(
+    (title) => !existingKeys.has(`${title.type}:${title.title}`),
+  );
+}
+
+module.exports = { findMissingTitles, seedCatalogIfEmpty };
