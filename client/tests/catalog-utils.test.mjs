@@ -4,6 +4,7 @@ import assert from "node:assert/strict";
 import {
   filterByType,
   getContentType,
+  getActiveGenre,
   getGenresForType,
   getTopTitles,
   groupByGenre,
@@ -88,4 +89,20 @@ test("catalog groups titles by genre and uses Other when genre is missing", () =
     "Interstellar",
   ]);
   assert.equal(groups.Other[0].title, "Legacy");
+});
+
+test("genre grouping accepts names inherited by ordinary objects", () => {
+  const groups = groupByGenre([
+    { title: "First", genre: "constructor" },
+    { title: "Second", genre: "toString" },
+  ]);
+
+  assert.equal(groups.constructor[0].title, "First");
+  assert.equal(groups.toString[0].title, "Second");
+});
+
+test("an unavailable genre falls back to All when content type changes", () => {
+  assert.equal(getActiveGenre("Romance", ["Drama", "Sci-Fi"]), "All");
+  assert.equal(getActiveGenre("Drama", ["Drama", "Sci-Fi"]), "Drama");
+  assert.equal(getActiveGenre("All", ["Drama"]), "All");
 });

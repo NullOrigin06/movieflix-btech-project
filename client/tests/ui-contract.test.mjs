@@ -136,3 +136,14 @@ test("streaming layout has grid, mobile navigation, and reduced-motion styles", 
   assert.match(styles, /@media \(prefers-reduced-motion: reduce\)/);
 });
 
+test("hero-free catalog and home states reserve space below fixed navigation", () => {
+  const catalogPage = read("../src/pages/CatalogPage.jsx");
+  const home = read("../src/pages/Home.jsx");
+  const styles = css();
+
+  assert.match(catalogPage, /featured \? "browse-page has-hero" : "browse-page no-hero"/);
+  assert.match(home, /featured \? "page home-page has-hero" : "page home-page no-hero"/);
+  assert.match(styles, /\.browse-page\.has-hero \.catalog-section/);
+  assert.match(styles, /\.home-page\.no-hero[^}]*padding-top/s);
+});
+

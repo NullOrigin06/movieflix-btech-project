@@ -33,7 +33,7 @@ function Home() {
   const genreGroups = Object.entries(groupByGenre(movies)).filter(([, titles]) => titles.length >= 3).slice(0, 3);
 
   return (
-    <main className="page home-page">
+    <main className={featured ? "page home-page has-hero" : "page home-page no-hero"}>
       <HeroBanner title={featured} />
       {loading && <div className="state-panel page-width home-state"><span className="loader" /><p>Loading titles...</p></div>}
       {(catalogError || actionError) && <div className="state-panel page-width error home-state" role="alert"><h2>We could not load MovieFlix</h2><p>{catalogError || actionError}</p></div>}

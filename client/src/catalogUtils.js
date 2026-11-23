@@ -18,6 +18,12 @@ export function getGenresForType(items, selectedType) {
   return genres;
 }
 
+export function getActiveGenre(selectedGenre, availableGenres) {
+  return selectedGenre === "All" || availableGenres.includes(selectedGenre)
+    ? selectedGenre
+    : "All";
+}
+
 export function sortNewest(items) {
   return [...items].sort((a, b) => {
     const yearDifference = (Number(b.year) || 0) - (Number(a.year) || 0);
@@ -46,5 +52,5 @@ export function groupByGenre(items) {
     if (!groups[genre]) groups[genre] = [];
     groups[genre].push(item);
     return groups;
-  }, {});
+  }, Object.create(null));
 }

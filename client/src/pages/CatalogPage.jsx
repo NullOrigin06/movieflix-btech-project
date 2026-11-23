@@ -2,21 +2,22 @@ import { useMemo, useState } from "react";
 import CatalogGrid from "../components/CatalogGrid.jsx";
 import HeroBanner from "../components/HeroBanner.jsx";
 import useCatalog from "../hooks/useCatalog.js";
-import { filterByType, getGenresForType, sortNewest } from "../catalogUtils.js";
+import { filterByType, getActiveGenre, getGenresForType, sortNewest } from "../catalogUtils.js";
 
 function CatalogPage({ type }) {
   const { movies, loading, error } = useCatalog();
   const [selectedGenre, setSelectedGenre] = useState("All");
   const typedTitles = useMemo(() => filterByType(movies, type), [movies, type]);
   const genres = useMemo(() => getGenresForType(movies, type), [movies, type]);
-  const visibleTitles = selectedGenre === "All"
+  const activeGenre = getActiveGenre(selectedGenre, genres);
+  const visibleTitles = activeGenre === "All"
     ? typedTitles
-    : typedTitles.filter((item) => (item.genre || "Other") === selectedGenre);
+    : typedTitles.filter((item) => (item.genre || "Other") === activeGenre);
   const pageTitle = type === "Show" ? "TV Shows" : "Movies";
   const featured = sortNewest(typedTitles)[0];
 
   return (
-    <main className="page browse-page">
+    <main className={`page ${featured ? "browse-page has-hero" : "browse-page no-hero"}`}>
       <HeroBanner title={featured} eyebrow={`${pageTitle} spotlight`} />
       <section className="catalog-section page-width">
         <div className="catalog-heading">
@@ -26,7 +27,7 @@ function CatalogPage({ type }) {
         {genres.length > 0 && (
           <div className="genre-buttons" aria-label={`Filter ${pageTitle} by genre`}>
             {["All", ...genres].map((genre) => (
-              <button key={genre} type="button" onClick={() => setSelectedGenre(genre)} className={selectedGenre === genre ? "genre-btn active" : "genre-btn"} aria-pressed={selectedGenre === genre}>{genre}</button>
+              <button key={genre} type="button" onClick={() => setSelectedGenre(genre)} className={activeGenre === genre ? "genre-btn active" : "genre-btn"} aria-pressed={activeGenre === genre}>{genre}</button>
             ))}
           </div>
         )}
