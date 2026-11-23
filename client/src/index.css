@@ -161,11 +161,18 @@ img { display: block; max-width: 100%; }
 .card:hover img { transform: scale(1.055); }
 .card-play { position: absolute; z-index: 2; left: 12px; bottom: 11px; display: grid; width: 32px; height: 32px; place-items: center; padding-left: 2px; border-radius: 50%; background: rgba(255,255,255,.93); color: #111; font-size: .72rem; opacity: 0; transform: translateY(6px); transition: .2s ease; }
 .card:hover .card-play, .card:focus-visible .card-play { opacity: 1; transform: none; }
+.card-overlay { position: absolute; z-index: 3; inset: auto 0 0; display: flex; flex-direction: column; gap: 5px; padding: 42px 12px 12px; background: linear-gradient(transparent, rgba(8,8,10,.96) 24%); opacity: 0; transform: translateY(8px); transition: opacity .2s ease, transform .2s ease; }
+.card:hover .card-overlay, .card:focus-visible .card-overlay { opacity: 1; transform: none; }
+.card-overlay-title { color: white; font-size: .94rem; font-weight: 800; }
+.card-overlay-description { display: -webkit-box; overflow: hidden; color: #d0d0d5; font-size: .72rem; line-height: 1.4; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+.card-overlay-link { color: #fff; font-size: .72rem; font-weight: 750; }
+.card-overlay-link span { margin-left: 3px; color: #46d369; }
 .card-info { padding: 11px 3px 0; }
 .card h3 { overflow: hidden; color: #f1f1f3; font-size: .95rem; line-height: 1.25; text-overflow: ellipsis; white-space: nowrap; }
 .card-meta { display: flex; gap: 9px; margin-top: 5px; color: #92929c; font-size: .78rem; }
 .card-meta span + span::before { content: "•"; margin-right: 9px; color: #55555d; }
 .card-meta .card-match { color: #46d369; font-weight: 750; }
+.card-meta .card-rating { color: #d0d0d5; }
 .remove-btn { position: absolute; z-index: 4; top: 8px; right: 8px; width: 30px; height: 30px; border-radius: 50%; background: rgba(10,10,12,.84); color: white; cursor: pointer; border: 1px solid rgba(255,255,255,.22); }
 .remove-btn:hover { background: var(--red); }
 
@@ -219,6 +226,12 @@ img { display: block; max-width: 100%; }
 .movie-info h1 { overflow-wrap: anywhere; font-size: clamp(2.2rem, 5vw, 4rem); line-height: 1.02; letter-spacing: -.04em; }
 .detail-meta { margin-top: 16px; }
 .detail-meta span { color: #c9c9d0; }
+.detail-facts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; max-width: 780px; margin-top: 28px; }
+.detail-facts div { padding: 14px; border: 1px solid rgba(255,255,255,.1); border-radius: 8px; background: rgba(255,255,255,.035); }
+.detail-facts dt, .detail-cast span { color: #92929c; font-size: .72rem; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; }
+.detail-facts dd { margin-top: 6px; color: #f1f1f3; font-size: .9rem; font-weight: 700; }
+.detail-cast { margin: 20px 0 24px; color: #c9c9d0; font-size: .92rem; line-height: 1.6; }
+.detail-cast span { display: block; margin-bottom: 5px; }
 .movie-description { margin-top: 20px; overflow-wrap: anywhere; color: #bbbcc4; font-size: 1.02rem; line-height: 1.75; }
 .btn-list { margin-top: 27px; background: white; color: #111; }
 .btn-list:hover { background: #e8e8eb; }
@@ -324,6 +337,7 @@ img { display: block; max-width: 100%; }
   .auth-box { padding: 27px 22px; }
   .video-box { border-radius: 8px; }
   .movie-info { padding-top: 28px; }
+  .detail-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
   .catalog-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 10px; }
   .catalog-grid .card-info { padding-inline: 1px; }
   .top-ten-item { flex-basis: 250px; }

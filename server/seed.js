@@ -55,12 +55,22 @@ const movies = [
     description: "An aspiring actor and a jazz musician fall in love while pursuing their dreams in Los Angeles." },
   { title: "Coco", genre: "Animation", year: 2017, rating: "PG", trailerId: "Ga6RYejo6Hk",
     description: "A young musician enters the Land of the Dead to uncover the story behind his family's ban on music." },
-  { title: "The Grand Budapest Hotel", genre: "Comedy", year: 2014, rating: "R", trailerId: "1Fg5iWmQjwk",
-    description: "A famous concierge and his lobby boy become involved in a stolen painting and a family fortune." },
+  { title: "Blade Runner 2049", genre: "Sci-Fi", year: 2017, rating: "R", trailerId: "gCcx85zbxz4",
+    description: "A new blade runner uncovers a secret that could change the fragile balance of a divided world." },
   { title: "Mad Max: Fury Road", genre: "Action", year: 2015, rating: "R", trailerId: "hEJnMQG9ev8",
     description: "A road warrior joins a rebel driver and a group of escapees fleeing a tyrant across the wasteland." },
   { title: "Get Out", genre: "Mystery", year: 2017, rating: "R", trailerId: "DzfpyUB60YY",
     description: "A weekend visit to meet his girlfriend's family leads a young photographer toward a disturbing discovery." },
+  { title: "Arrival", genre: "Sci-Fi", year: 2016, rating: "PG-13", trailerId: "tFMo3UJ4B4g",
+    description: "A linguist works to understand the visitors who have arrived on Earth before fear turns into conflict." },
+  { title: "The Shawshank Redemption", genre: "Drama", year: 1994, rating: "R", trailerId: "6hB3S9bIaco",
+    description: "Two prisoners build an unlikely friendship and hold on to hope through years behind bars." },
+  { title: "Whiplash", genre: "Drama", year: 2014, rating: "R", trailerId: "7d_jQycdQGo",
+    description: "A determined young drummer pushes himself to the limit under the demands of a strict instructor." },
+  { title: "The Grand Budapest Hotel", genre: "Comedy", year: 2014, rating: "R", trailerId: "1Fg5iWmQjwk",
+    description: "A famous concierge and his lobby boy become involved in a stolen painting and a family fortune." },
+  { title: "Paddington 2", genre: "Family", year: 2017, rating: "PG", trailerId: "52x5HJ9H8DM",
+    description: "Paddington takes a series of odd jobs to buy a special gift, then finds himself caught in a mystery." },
 ];
 
 const shows = [
@@ -88,6 +98,16 @@ const shows = [
     description: "Hundreds of people in debt enter a series of children's games where losing has deadly consequences." },
   { title: "The Witcher", genre: "Fantasy", year: 2019, rating: "TV-MA", trailerId: "ndl1W4ltcmg",
     description: "A monster hunter travels through a dangerous world as his fate becomes tied to a princess with a secret." },
+  { title: "The Office", genre: "Comedy", year: 2005, rating: "TV-14", trailerId: "tNcDHWpselE",
+    description: "The everyday lives of office coworkers become a comedy of awkward meetings and workplace friendships." },
+  { title: "Sherlock", genre: "Mystery", year: 2010, rating: "TV-14", trailerId: "xK7S9mrFWL4",
+    description: "A sharp-minded detective and his flatmate solve unusual crimes across modern-day London." },
+  { title: "Blue Planet II", genre: "Documentary", year: 2017, rating: "TV-PG", trailerId: "-E-_IRJU5g0",
+    description: "A journey beneath the waves reveals the remarkable wildlife and changing habitats of the oceans." },
+  { title: "The Good Place", genre: "Comedy", year: 2016, rating: "TV-14", trailerId: "9QxRbzFk3zk",
+    description: "After arriving in an unusual afterlife neighborhood, Eleanor tries to become a better person." },
+  { title: "Our Planet", genre: "Documentary", year: 2019, rating: "TV-PG", trailerId: "aETNYyrqNYE",
+    description: "From forests to oceans, this nature series explores the habitats and animals sharing our planet." },
 ];
 
 function buildCatalog() {

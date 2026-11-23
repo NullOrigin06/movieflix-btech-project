@@ -76,6 +76,13 @@ function MovieDetail() {
             <span>{movie.genre || "Other"}</span>
           </div>
           <p className="movie-description">{movie.description}</p>
+          <dl className="detail-facts">
+            <div><dt>Genre</dt><dd>{movie.genre || "Other"}</dd></div>
+            <div><dt>Released</dt><dd>{movie.year || "—"}</dd></div>
+            <div><dt>Rating</dt><dd>{movie.rating || "Not rated"}</dd></div>
+            <div><dt>Format</dt><dd>{getContentType(movie)}</dd></div>
+          </dl>
+          <p className="detail-cast"><span>More to explore</span> Discover more stories from {movie.genre || "this collection"}.</p>
           <button onClick={toggleList} className={inList ? "btn btn-list active" : "btn btn-list"} aria-pressed={inList}>
             <span aria-hidden="true">{inList ? "✓" : "+"}</span>{inList ? "Added to My List" : "Add to My List"}
           </button>
