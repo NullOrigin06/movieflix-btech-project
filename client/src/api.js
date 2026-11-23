@@ -1,7 +1,7 @@
+import { resolveApiBase } from "./apiBase";
+
 // All the talking to our backend happens here, so pages stay simple.
-const API = (
-  import.meta.env.VITE_API_URL || "http://localhost:5000/api"
-).replace(/\/$/, "");
+const API = resolveApiBase(import.meta.env.VITE_API_URL);
 
 // Sends a request. If the user is logged in, it adds their token.
 async function request(path, method = "GET", body) {
