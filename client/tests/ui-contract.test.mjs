@@ -14,32 +14,33 @@ test("navigation exposes active links, avatar, and responsive styles", () => {
   assert.match(css(), /@media \(max-width: 768px\)/);
 });
 
-test("home exposes featured metadata, discovery controls, and intentional empty state", () => {
+test("home exposes featured metadata, curated rows, and intentional empty state", () => {
   const home = read("../src/pages/Home.jsx");
   const row = read("../src/components/MovieRow.jsx");
   const card = read("../src/components/MovieCard.jsx");
-  assert.match(home, /featured-label/);
-  assert.match(home, /discovery-panel/);
-  assert.match(home, /No movies found/);
+  assert.match(home, /HeroBanner/);
+  assert.match(home, /Trending Now/);
+  assert.match(home, /No titles are available/);
   assert.match(row, /aria-label=.*titles/);
+  assert.match(row, /row-track/);
   assert.match(card, /loading="lazy"/);
   assert.match(card, /card-meta/);
+  assert.match(card, /card-match/);
   assert.match(css(), /scroll-snap-type/);
 });
 
-test("filtered discovery avoids header overlap and reports the displayed count", () => {
+test("home limits curated rows and groups genres", () => {
   const home = read("../src/pages/Home.jsx");
-  assert.match(home, /const showHero =/);
-  assert.match(home, /const displayedMovieCount =/);
-  assert.match(home, /with-hero/);
-  assert.match(css(), /\.discovery-panel\.with-hero/);
+  assert.match(home, /groupByGenre/);
+  assert.match(home, /slice\(0, 10\)/);
+  assert.match(home, /slice\(0, 3\)/);
 });
 
 test("movie requests ignore superseded responses", () => {
-  const home = read("../src/pages/Home.jsx");
-  assert.match(home, /let cancelled = false/);
-  assert.match(home, /if \(cancelled\) return/);
-  assert.match(home, /cancelled = true/);
+  const hook = read("../src/hooks/useCatalog.js");
+  assert.match(hook, /let cancelled = false/);
+  assert.match(hook, /if \(cancelled\) return/);
+  assert.match(hook, /cancelled = true/);
 });
 
 test("long movie values stay inside cards and wrap in full-text views", () => {
@@ -78,5 +79,36 @@ test("authentication fields are labelled and retain autofill readability", () =>
   assert.match(register, /autoComplete="new-password"/);
   assert.match(register, /minLength=\{6\}/);
   assert.match(css(), /:-webkit-autofill/);
+});
+
+test("browse pages reuse the streaming hero and catalog grid", () => {
+  const hero = read("../src/components/HeroBanner.jsx");
+  const grid = read("../src/components/CatalogGrid.jsx");
+  const catalogPage = read("../src/pages/CatalogPage.jsx");
+  const home = read("../src/pages/Home.jsx");
+
+  assert.match(hero, /hero-actions/);
+  assert.match(hero, /getContentType/);
+  assert.match(grid, /catalog-grid/);
+  assert.match(catalogPage, /genre-buttons/);
+  assert.match(catalogPage, /No .* found/);
+  assert.match(home, /HeroBanner/);
+  assert.match(home, /Trending Now/);
+});
+
+test("new and popular page includes recent rows and a numbered top ten", () => {
+  const page = read("../src/pages/NewAndPopular.jsx");
+  assert.match(page, /New Releases/);
+  assert.match(page, /Top 10 Today/);
+  assert.match(page, /top-ten-number/);
+  assert.match(page, /state-panel/);
+});
+
+test("search page reads the query parameter and handles empty and no-result states", () => {
+  const page = read("../src/pages/Search.jsx");
+  assert.match(page, /useSearchParams/);
+  assert.match(page, /Start typing to search/);
+  assert.match(page, /No matches found/);
+  assert.match(page, /CatalogGrid/);
 });
 

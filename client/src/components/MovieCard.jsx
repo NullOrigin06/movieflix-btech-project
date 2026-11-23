@@ -12,7 +12,7 @@ function MovieCard({ movie }) {
       </div>
       <div className="card-info">
         <h3>{movie.title}</h3>
-        <p className="card-meta"><span>{movie.genre || "Other"}</span>{movie.year && <span>{movie.year}</span>}</p>
+        <p className="card-meta"><span className="card-match">Popular</span>{movie.year && <span>{movie.year}</span>}<span>{movie.genre || "Other"}</span></p>
       </div>
     </Link>
   );
