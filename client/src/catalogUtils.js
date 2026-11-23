@@ -17,3 +17,34 @@ export function getGenresForType(items, selectedType) {
 
   return genres;
 }
+
+export function sortNewest(items) {
+  return [...items].sort((a, b) => {
+    const yearDifference = (Number(b.year) || 0) - (Number(a.year) || 0);
+    return yearDifference || String(a.title || "").localeCompare(String(b.title || ""));
+  });
+}
+
+export function sortTopRated(items) {
+  return [...items].sort((a, b) => {
+    const scoreDifference = (Number(b.score) || 0) - (Number(a.score) || 0);
+    if (scoreDifference) return scoreDifference;
+
+    const yearDifference = (Number(b.year) || 0) - (Number(a.year) || 0);
+    return yearDifference || String(a.title || "").localeCompare(String(b.title || ""));
+  });
+}
+
+export function getTopTitles(items, limit = 10) {
+  if (limit <= 0) return [];
+  return sortTopRated(items).slice(0, limit);
+}
+
+export function groupByGenre(items) {
+  return items.reduce((groups, item) => {
+    const genre = item.genre || "Other";
+    if (!groups[genre]) groups[genre] = [];
+    groups[genre].push(item);
+    return groups;
+  }, {});
+}
