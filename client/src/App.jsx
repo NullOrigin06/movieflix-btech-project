@@ -6,6 +6,9 @@ import Register from "./pages/Register.jsx";
 import Home from "./pages/Home.jsx";
 import MovieDetail from "./pages/MovieDetail.jsx";
 import MyList from "./pages/MyList.jsx";
+import CatalogPage from "./pages/CatalogPage.jsx";
+import NewAndPopular from "./pages/NewAndPopular.jsx";
+import Search from "./pages/Search.jsx";
 
 function App() {
   // When the page loads, check if a user was saved in the browser earlier
@@ -37,6 +40,10 @@ function App() {
 
         {/* These pages need a logged-in user, otherwise go to /login */}
         <Route path="/" element={user ? <Home /> : <Navigate to="/login" />} />
+        <Route path="/movies" element={user ? <CatalogPage type="Movie" /> : <Navigate to="/login" />} />
+        <Route path="/shows" element={user ? <CatalogPage type="Show" /> : <Navigate to="/login" />} />
+        <Route path="/new" element={user ? <NewAndPopular /> : <Navigate to="/login" />} />
+        <Route path="/search" element={user ? <Search /> : <Navigate to="/login" />} />
         <Route path="/movie/:id" element={user ? <MovieDetail /> : <Navigate to="/login" />} />
         <Route path="/mylist" element={user ? <MyList /> : <Navigate to="/login" />} />
 

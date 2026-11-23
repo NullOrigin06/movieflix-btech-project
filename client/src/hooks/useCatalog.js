@@ -9,9 +9,6 @@ function useCatalog() {
   useEffect(() => {
     let cancelled = false;
 
-    setLoading(true);
-    setError("");
-
     getMovies()
       .then((data) => {
         if (cancelled) return;

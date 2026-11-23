@@ -112,3 +112,27 @@ test("search page reads the query parameter and handles empty and no-result stat
   assert.match(page, /CatalogGrid/);
 });
 
+test("app routes and navigation expose every discovery page", () => {
+  const app = read("../src/App.jsx");
+  const navbar = read("../src/components/Navbar.jsx");
+
+  for (const route of ["/movies", "/shows", "/new", "/search"]) {
+    assert.match(app, new RegExp(`path="${route}"`));
+  }
+  assert.match(navbar, />TV Shows</);
+  assert.match(navbar, />Movies</);
+  assert.match(navbar, />New &amp; Popular</);
+  assert.match(navbar, /aria-label="Search MovieFlix"/);
+  assert.match(navbar, /navigate\(`\/search\?q=/);
+});
+
+test("streaming layout has grid, mobile navigation, and reduced-motion styles", () => {
+  const styles = css();
+  assert.match(styles, /\.catalog-grid/);
+  assert.match(styles, /\.top-ten-number/);
+  assert.match(styles, /\.nav-search/);
+  assert.match(styles, /@media \(max-width: 768px\)/);
+  assert.match(styles, /overflow-x:\s*auto/);
+  assert.match(styles, /@media \(prefers-reduced-motion: reduce\)/);
+});
+
