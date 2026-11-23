@@ -67,9 +67,18 @@ async function replaceCatalog() {
     posterUrl: "https://img.youtube.com/vi/" + title.trailerId + "/hqdefault.jpg",
   }));
 
-  await User.updateMany({}, { $set: { myList: [], watching: [] } });
-  await Movie.deleteMany({});
-  await Movie.insertMany(titles);
+  // Stage the replacement first. A bad title must not wipe the working catalog.
+  const inserted = await Movie.insertMany(titles);
+  const insertedIds = inserted.map((title) => title._id);
+
+  try {
+    await User.updateMany({}, { $set: { myList: [], watching: [] } });
+    await Movie.deleteMany({ _id: { $nin: insertedIds } });
+  } catch (error) {
+    // Keep the old catalog if the replacement cannot be completed.
+    await Movie.deleteMany({ _id: { $in: insertedIds } }).catch(() => {});
+    throw error;
+  }
   console.log(`Added ${movies.length} movies and ${shows.length} shows`);
 }
 

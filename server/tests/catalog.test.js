@@ -30,15 +30,16 @@ test("reseed builds the expanded catalog and clears references safely", async (t
   t.mock.method(Movie, "insertMany", async (records) => {
     operations.push(["insert catalog"]);
     catalog = records;
+    return records.map((record, index) => ({ ...record, _id: `new-${index}` }));
   });
 
   await replaceCatalog();
 
-  await t.test("replacement removes saved and watching references before old titles", () => {
+  await t.test("replacement stages new titles before removing old references", () => {
     assert.deepEqual(operations, [
-      ["clear references", {}, { $set: { myList: [], watching: [] } }],
-      ["delete catalog", {}],
       ["insert catalog"],
+      ["clear references", {}, { $set: { myList: [], watching: [] } }],
+      ["delete catalog", { _id: { $nin: catalog.map((entry, index) => `new-${index}`) } }],
     ]);
   });
   await t.test("inserts at least 18 movies and 6 shows with usable trailer metadata", async () => {

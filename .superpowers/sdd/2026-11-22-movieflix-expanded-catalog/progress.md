@@ -6,8 +6,9 @@ Pre-flight: Task 1 produces `Movie.type` and seeded documents consumed by Task 2
 Pre-flight: Task 2 preserves missing-type fallback so older API records remain compatible.
 Pre-flight: Task 3 consumes completed server and client work and may reseed only after reference cleanup is verified.
 
-Task 1: in progress (backend catalog agent; RED tests required before implementation).
-Task 2: in progress (frontend catalog agent; RED tests required before implementation).
-Task 3: pending integration and full verification.
-Deployment: in progress (production configuration agent); Render + MongoDB Atlas guide requested by user.
-External access: GitHub CLI credentials are expired; Render and MongoDB Atlas connections have been offered while code work continues.
+Task 1: complete (RED confirmed; schema/seed tests GREEN; 18 movies + 6 shows; staged replacement avoids deleting a working catalog before validation).
+Task 2: complete (RED confirmed; 11/11 client UI/helper tests GREEN; Movies/Shows controls, labels, scoped genres, and mixed-title wording implemented).
+Task 3: automated verification complete (server 9/9, client 11/11 + production 2/2, lint clean, build pass); live reseed pending explicit confirmation because it clears saved/watch references.
+Deployment: production configuration complete (Render Blueprint, Atlas/env guide, CORS, health route, Node 22.12 pin, SPA rewrite, auth throttling).
+External access: local Git initialized and committed; GitHub public repository form awaits action-time confirmation; MongoDB Atlas connected; Render connection remains pending.
+Final review: one high, two medium, and one low finding addressed in a single RED→GREEN pass; no release-blocking findings remained.

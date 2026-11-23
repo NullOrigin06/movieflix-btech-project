@@ -15,3 +15,12 @@ test("server exposes a deployment health endpoint", () => {
   const server = read("../server.js");
   assert.match(server, /app\.get\("\/api\/health"/);
 });
+
+test("production pins a Node version supported by Vite and Mongoose", () => {
+  const serverPackage = require("../package.json");
+  const clientPackage = require("../../client/package.json");
+  const renderBlueprint = read("../../render.yaml");
+  assert.equal(serverPackage.engines.node, ">=22.12.0");
+  assert.equal(clientPackage.engines.node, ">=22.12.0");
+  assert.match(renderBlueprint, /key:\s*NODE_VERSION[\s\S]*value:\s*22\.12\.0/);
+});

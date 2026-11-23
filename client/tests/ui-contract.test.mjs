@@ -21,7 +21,7 @@ test("home exposes featured metadata, discovery controls, and intentional empty 
   assert.match(home, /featured-label/);
   assert.match(home, /discovery-panel/);
   assert.match(home, /No movies found/);
-  assert.match(row, /aria-label=.*movies/);
+  assert.match(row, /aria-label=.*titles/);
   assert.match(card, /loading="lazy"/);
   assert.match(card, /card-meta/);
   assert.match(css(), /scroll-snap-type/);
@@ -54,9 +54,18 @@ test("detail and list pages expose accessible status and empty-state controls", 
   assert.match(detail, /aria-pressed/);
   assert.match(detail, /detail-backdrop/);
   assert.match(detail, /movie-description/);
-  assert.match(list, /Browse movies/);
+  assert.match(list, /Browse titles/);
   assert.match(list, /page-eyebrow/);
   assert.match(css(), /\.detail-content/);
+});
+
+test("mixed catalog collections use title wording", () => {
+  const list = read("../src/pages/MyList.jsx");
+  const row = read("../src/components/MovieRow.jsx");
+  assert.match(list, /Titles you saved for later/);
+  assert.match(list, /Open a title/);
+  assert.match(list, /Saved titles/);
+  assert.match(row, /aria-label=\{`\$\{title\} titles`\}/);
 });
 
 test("authentication fields are labelled and retain autofill readability", () => {
