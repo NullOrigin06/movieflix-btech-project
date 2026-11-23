@@ -17,7 +17,7 @@ services:
       - key: JWT_SECRET
         generateValue: true
       - key: CLIENT_URL
-        sync: false
+        value: https://movieflix-client.onrender.com
 
   - type: web
     name: movieflix-client
@@ -29,7 +29,7 @@ services:
       - key: NODE_VERSION
         value: 22.12.0
       - key: VITE_API_URL
-        sync: false
+        value: https://movieflix-api-gvet.onrender.com/api
     routes:
       - type: rewrite
         source: /*
