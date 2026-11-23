@@ -42,9 +42,10 @@ test("reseed builds the expanded catalog and clears references safely", async (t
       ["delete catalog", { _id: { $nin: catalog.map((entry, index) => `new-${index}`) } }],
     ]);
   });
-  await t.test("inserts at least 18 movies and 6 shows with usable trailer metadata", async () => {
-    assert.ok(catalog.filter((entry) => entry.type === "Movie").length >= 18);
-    assert.ok(catalog.filter((entry) => entry.type === "Show").length >= 6);
+  await t.test("inserts at least 28 movies and 12 shows with usable trailer metadata", async () => {
+    assert.ok(catalog.filter((entry) => entry.type === "Movie").length >= 28);
+    assert.ok(catalog.filter((entry) => entry.type === "Show").length >= 12);
+    assert.ok(catalog.length >= 40);
     assert.equal(new Set(catalog.map((entry) => entry.title)).size, catalog.length);
     for (const entry of catalog) {
       await new Movie(entry).validate();
