@@ -9,6 +9,7 @@ import MyList from "./pages/MyList.jsx";
 import CatalogPage from "./pages/CatalogPage.jsx";
 import NewAndPopular from "./pages/NewAndPopular.jsx";
 import Search from "./pages/Search.jsx";
+import ScrollToTop from "./components/ScrollToTop.jsx";
 
 function App() {
   // When the page loads, check if a user was saved in the browser earlier
@@ -32,6 +33,7 @@ function App() {
 
   return (
     <div>
+      <ScrollToTop />
       {user && <Navbar user={user} onLogout={handleLogout} />}
 
       <Routes>

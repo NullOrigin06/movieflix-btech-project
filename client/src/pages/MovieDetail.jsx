@@ -7,19 +7,32 @@ import {
   removeFromMyList,
   saveWatching,
 } from "../api.js";
-import { getContentType } from "../catalogUtils.js";
+import MovieRow from "../components/MovieRow.jsx";
+import useCatalog from "../hooks/useCatalog.js";
+import usePageTitle from "../hooks/usePageTitle.js";
+import { getContentType, getRelatedTitles } from "../catalogUtils.js";
 
+// Keyed by id so opening another title starts with fresh state
 function MovieDetail() {
   const { id } = useParams(); // the :id from the URL /movie/:id
+  return <MovieDetailView key={id} id={id} />;
+}
+
+function MovieDetailView({ id }) {
   const [movie, setMovie] = useState(null);
   const [inList, setInList] = useState(false);
   const [error, setError] = useState("");
+  const [copied, setCopied] = useState(""); // "", "copied" or "failed"
+  const { movies: catalog } = useCatalog();
+  usePageTitle(movie ? movie.title : "Loading");
 
   useEffect(() => {
+    let cancelled = false;
+
     // load the movie
     getMovie(id)
-      .then((data) => setMovie(data))
-      .catch((err) => setError(err.message));
+      .then((data) => { if (!cancelled) setMovie(data); })
+      .catch((err) => { if (!cancelled) setError(err.message); });
 
     // remember this movie for the "Continue Watching" row
     saveWatching(id).catch(() => {});
@@ -27,9 +40,11 @@ function MovieDetail() {
     // check if it is already in My List
     getMyList()
       .then((list) => {
-        setInList(list.some((m) => m._id === id));
+        if (!cancelled) setInList(list.some((m) => m._id === id));
       })
       .catch(() => {});
+
+    return () => { cancelled = true; };
   }, [id]);
 
   async function toggleList() {
@@ -46,6 +61,28 @@ function MovieDetail() {
     }
   }
 
+  // Copies the page address so the title can be shared
+  async function copyLink() {
+    let done = false;
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      done = true;
+    } catch {
+      // older browsers or blocked clipboard access: try the legacy way
+      const box = document.createElement("textarea");
+      box.value = window.location.href;
+      box.setAttribute("readonly", "");
+      box.style.position = "fixed";
+      box.style.opacity = "0";
+      document.body.appendChild(box);
+      box.select();
+      try { done = document.execCommand("copy"); } catch { done = false; }
+      document.body.removeChild(box);
+    }
+    setCopied(done ? "copied" : "failed");
+    setTimeout(() => setCopied(""), 2500);
+  }
+
   if (error) {
     return (
       <main className="page detail page-width">
@@ -55,8 +92,21 @@ function MovieDetail() {
   }
 
   if (!movie) {
-    return <p className="message page">Loading...</p>;
+    return (
+      <main className="page detail-page" aria-busy="true">
+        <div className="detail-content page-width" role="status" aria-label="Loading title">
+          <div className="video-box skeleton-image" />
+          <div className="movie-info" aria-hidden="true">
+            <div className="skeleton-line wide" />
+            <div className="skeleton-line" />
+            <div className="skeleton-line short" />
+          </div>
+        </div>
+      </main>
+    );
   }
+
+  const related = getRelatedTitles(catalog, movie, 10);
 
   return (
     <main className="page detail-page">
@@ -82,12 +132,18 @@ function MovieDetail() {
             <div><dt>Rating</dt><dd>{movie.rating || "Not rated"}</dd></div>
             <div><dt>Format</dt><dd>{getContentType(movie)}</dd></div>
           </dl>
-          <p className="detail-cast"><span>More to explore</span> Discover more stories from {movie.genre || "this collection"}.</p>
-          <button onClick={toggleList} className={inList ? "btn btn-list active" : "btn btn-list"} aria-pressed={inList}>
-            <span aria-hidden="true">{inList ? "✓" : "+"}</span>{inList ? "Added to My List" : "Add to My List"}
-          </button>
+          <div className="detail-actions">
+            <button onClick={toggleList} className={inList ? "btn btn-list active" : "btn btn-list"} aria-pressed={inList}>
+              <span aria-hidden="true">{inList ? "✓" : "+"}</span>{inList ? "Added to My List" : "Add to My List"}
+            </button>
+            <button type="button" onClick={copyLink} className="btn btn-share">
+              <span aria-hidden="true">{copied === "copied" ? "✓" : "↗"}</span>{copied === "copied" ? "Link copied" : copied === "failed" ? "Copy failed" : "Share"}
+            </button>
+          </div>
+          <span className="visually-hidden" role="status">{copied === "copied" ? "Link copied to clipboard" : copied === "failed" ? "Could not copy the link" : ""}</span>
         </section>
       </div>
+      {related.length > 0 && <MovieRow title="More Like This" movies={related} />}
     </main>
   );
 }

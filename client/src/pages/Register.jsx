@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { registerUser } from "../api.js";
+import usePageTitle from "../hooks/usePageTitle.js";
 
 function Register({ onLogin }) {
+  usePageTitle("Sign up");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

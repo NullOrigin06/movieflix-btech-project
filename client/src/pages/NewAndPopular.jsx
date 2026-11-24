@@ -1,10 +1,13 @@
 import CatalogGrid from "../components/CatalogGrid.jsx";
 import MovieCard from "../components/MovieCard.jsx";
+import SkeletonGrid from "../components/SkeletonGrid.jsx";
 import useCatalog from "../hooks/useCatalog.js";
+import usePageTitle from "../hooks/usePageTitle.js";
 import { getTopTitles, sortNewest } from "../catalogUtils.js";
 
 function NewAndPopular() {
   const { movies, loading, error } = useCatalog();
+  usePageTitle("New & Popular");
   const newest = sortNewest(movies).slice(0, 18);
   const topTen = getTopTitles(movies, 10);
 
@@ -15,7 +18,7 @@ function NewAndPopular() {
         <h1>New &amp; Popular</h1>
         <p>New releases and the titles everyone is watching right now.</p>
       </header>
-      {loading && <div className="state-panel page-width"><span className="loader" /><p>Loading popular titles...</p></div>}
+      {loading && <div className="page-width"><SkeletonGrid count={4} label="Loading popular titles" /></div>}
       {error && <div className="state-panel page-width error" role="alert"><h2>Could not load this collection</h2><p>{error}</p></div>}
       {!loading && !error && movies.length === 0 && <div className="state-panel page-width"><h2>No titles are available</h2><p>Please check back later.</p></div>}
       {!loading && !error && movies.length > 0 && (

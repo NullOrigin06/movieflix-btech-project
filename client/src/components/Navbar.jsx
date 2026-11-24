@@ -14,6 +14,15 @@ function Navbar({ user, onLogout }) {
       return;
     }
     navigate(`/search?q=${encodeURIComponent(search.trim())}`);
+    setSearchOpen(false);
+  }
+
+  // Escape closes the search box and clears what was typed
+  function handleKeyDown(event) {
+    if (event.key === "Escape") {
+      setSearch("");
+      setSearchOpen(false);
+    }
   }
 
   return (
@@ -33,7 +42,7 @@ function Navbar({ user, onLogout }) {
 
       <div className="nav-right">
         <form className={searchOpen ? "nav-search open" : "nav-search"} onSubmit={handleSearch} role="search">
-          {searchOpen && <input autoFocus type="search" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Titles, people, genres" aria-label="Search MovieFlix" />}
+          {searchOpen && <input autoFocus type="search" value={search} onChange={(event) => setSearch(event.target.value)} onKeyDown={handleKeyDown} placeholder="Titles, people, genres" aria-label="Search MovieFlix" />}
           <button type="submit" className="nav-search-button" aria-label={searchOpen ? "Submit search" : "Open search"}>⌕</button>
         </form>
         <div className="user-summary" title={user.name}>

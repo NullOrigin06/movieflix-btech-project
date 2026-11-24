@@ -54,3 +54,33 @@ export function groupByGenre(items) {
     return groups;
   }, Object.create(null));
 }
+
+export const SORT_OPTIONS = [
+  { value: "newest", label: "Newest first" },
+  { value: "oldest", label: "Oldest first" },
+  { value: "az", label: "Title A–Z" },
+  { value: "za", label: "Title Z–A" },
+];
+
+// Returns a sorted copy. Unknown modes keep the original order.
+export function sortTitles(items, mode) {
+  const byTitle = (a, b) => String(a.title || "").localeCompare(String(b.title || ""));
+  const byYear = (a, b) => (Number(a.year) || 0) - (Number(b.year) || 0);
+
+  if (mode === "newest") return sortNewest(items);
+  if (mode === "oldest") return [...items].sort((a, b) => byYear(a, b) || byTitle(a, b));
+  if (mode === "az") return [...items].sort(byTitle);
+  if (mode === "za") return [...items].sort((a, b) => byTitle(b, a));
+  return [...items];
+}
+
+// Other titles in the same genre first, then the same type, never the title itself.
+export function getRelatedTitles(items, movie, limit = 10) {
+  if (!movie || limit <= 0) return [];
+  const genre = movie.genre || "Other";
+  const type = getContentType(movie);
+  const others = items.filter((item) => item._id !== movie._id);
+  const sameGenre = others.filter((item) => (item.genre || "Other") === genre);
+  const sameType = others.filter((item) => (item.genre || "Other") !== genre && getContentType(item) === type);
+  return [...sortNewest(sameGenre), ...sortNewest(sameType)].slice(0, limit);
+}

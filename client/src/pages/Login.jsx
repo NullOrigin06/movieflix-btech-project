@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { loginUser } from "../api.js";
+import usePageTitle from "../hooks/usePageTitle.js";
 
 function Login({ onLogin }) {
+  usePageTitle("Log in");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");

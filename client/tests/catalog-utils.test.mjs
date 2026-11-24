@@ -10,6 +10,8 @@ import {
   groupByGenre,
   sortNewest,
   sortTopRated,
+  sortTitles,
+  getRelatedTitles,
 } from "../src/catalogUtils.js";
 
 const catalog = [
@@ -105,4 +107,28 @@ test("an unavailable genre falls back to All when content type changes", () => {
   assert.equal(getActiveGenre("Romance", ["Drama", "Sci-Fi"]), "All");
   assert.equal(getActiveGenre("Drama", ["Drama", "Sci-Fi"]), "Drama");
   assert.equal(getActiveGenre("All", ["Drama"]), "All");
+});
+
+const sample = [
+  { _id: "1", title: "Beta", type: "Movie", genre: "Drama", year: 2020 },
+  { _id: "2", title: "alpha", type: "Movie", genre: "Drama", year: 2022 },
+  { _id: "3", title: "Gamma", type: "Show", genre: "Drama", year: 2022 },
+  { _id: "4", title: "Delta", type: "Movie", genre: "Action", year: 2018 },
+];
+
+test("sortTitles orders by year or title without changing the input", () => {
+  const input = [...sample];
+  assert.deepEqual(sortTitles(input, "newest").map((i) => i._id), ["2", "3", "1", "4"]);
+  assert.deepEqual(sortTitles(input, "oldest").map((i) => i._id), ["4", "1", "2", "3"]);
+  assert.deepEqual(sortTitles(input, "az").map((i) => i._id), ["2", "1", "4", "3"]);
+  assert.deepEqual(sortTitles(input, "za").map((i) => i._id), ["3", "4", "1", "2"]);
+  assert.deepEqual(sortTitles(input, "unknown").map((i) => i._id), ["1", "2", "3", "4"]);
+  assert.deepEqual(input.map((i) => i._id), ["1", "2", "3", "4"]);
+});
+
+test("getRelatedTitles prefers the same genre, then the same type, and skips the title itself", () => {
+  assert.deepEqual(getRelatedTitles(sample, sample[0]).map((i) => i._id), ["2", "3", "4"]);
+  assert.deepEqual(getRelatedTitles(sample, sample[3]).map((i) => i._id), ["2", "1"]);
+  assert.deepEqual(getRelatedTitles(sample, sample[0], 1).map((i) => i._id), ["2"]);
+  assert.deepEqual(getRelatedTitles(sample, null), []);
 });

@@ -3,12 +3,14 @@ import { getWatching, removeWatching } from "../api.js";
 import HeroBanner from "../components/HeroBanner.jsx";
 import MovieRow from "../components/MovieRow.jsx";
 import useCatalog from "../hooks/useCatalog.js";
+import usePageTitle from "../hooks/usePageTitle.js";
 import { filterByType, getTopTitles, groupByGenre, sortNewest } from "../catalogUtils.js";
 
 function Home() {
   const { movies, loading, error: catalogError } = useCatalog();
   const [watching, setWatching] = useState([]);
   const [actionError, setActionError] = useState("");
+  usePageTitle("Home");
 
   // Load the Continue Watching movies once, when the page opens
   useEffect(() => {
